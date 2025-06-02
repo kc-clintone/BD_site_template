@@ -29,7 +29,7 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  min-height: 100vh;
+  height: 100vh;
   z-index: 1;
   position: relative;
 }
@@ -50,12 +50,15 @@ body {
 }
 
 .card {
-  margin-top: 2rem;
+  margin-top: 5rem;
   padding: 2rem;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   animation: fadeIn 1s forwards;
+  max-width: 1500px;
+  height: auto;
+  margin-bottom: 5rem;
 }
 
 .hidden {
