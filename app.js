@@ -1,95 +1,107 @@
-const canvas = document.getElementById('confettiCanvas');
-const ctx = canvas.getContext('2d');
-resizeCanvas();
+      // DOM Elements
+      const mainButton = document.getElementById('mainButton');
+      const birthdayCard = document.getElementById('birthdayCard');
+      const musicButton = document.getElementById('musicButton');
+      const birthdayAudio = document.getElementById('birthdayAudio');
+      const recipientName = document.getElementById('recipientName');
 
-const confetti = [];
-let confettiAnimationId;
+      // Get name from URL parameter
+      function getNameFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = urlParams.get('name');
+        return name || 'Beautiful Soul';
+      }
 
-function random(min, max) {
-  return Math.random() * (max - min) + min;
-}
+      // Set the recipient name
+      function setRecipientName() {
+        const name = getNameFromURL();
+        recipientName.textContent = name;
+        console.log('Setting recipient name to:', name);
+      }
 
-function createConfetti() {
-  confetti.length = 0; // Clear old confetti
-  for (let i = 0; i < 300; i++) {
-    confetti.push({
-      x: random(0, canvas.width),
-      y: random(0, canvas.height),
-      size: random(2, 6),
-      color: `hsl(${random(0, 360)}, 100%, 50%)`,
-      speedX: random(-2, 2),
-      speedY: random(2, 5),
-    });
-  }
-}
+      // Create confetti animation
+      function createConfetti() {
+        const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff'];
+        const confettiCount = 100;
 
-function updateConfetti() {
-  for (let i = 0; i < confetti.length; i++) {
-    confetti[i].x += confetti[i].speedX;
-    confetti[i].y += confetti[i].speedY;
+        for (let i = 0; i < confettiCount; i++) {
+          setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+            confetti.style.left = Math.random() * window.innerWidth + 'px';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animation = `confetti-fall ${Math.random() * 3 + 2}s linear forwards`;
+            
+            if (Math.random() > 0.5) {
+              confetti.style.borderRadius = '50%';
+            }
 
-    if (confetti[i].y > canvas.height) {
-      confetti[i].y = -5;
-      confetti[i].x = random(0, canvas.width);
-    }
-  }
-}
+            document.body.appendChild(confetti);
 
-function drawConfetti() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (let i = 0; i < confetti.length; i++) {
-    ctx.fillStyle = confetti[i].color;
-    ctx.beginPath();
-    ctx.arc(confetti[i].x, confetti[i].y, confetti[i].size, 0, Math.PI * 2);
-    ctx.fill();
-  }
-}
+            // Remove confetti after animation
+            setTimeout(() => {
+              if (confetti.parentNode) {
+                confetti.parentNode.removeChild(confetti);
+              }
+            }, 5000);
+          }, i * 50);
+        }
 
-function animateConfetti() {
-  updateConfetti();
-  drawConfetti();
-  confettiAnimationId = requestAnimationFrame(animateConfetti);
-}
+        console.log('Confetti animation started!');
+      }
 
-function stopConfetti() {
-  cancelAnimationFrame(confettiAnimationId);
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
+      // Show birthday card with animation
+      function showBirthdayCard() {
+        console.log('Showing birthday card...');
+        mainButton.classList.add('hidden');
+        birthdayCard.classList.remove('hidden');
+        
+        // Trigger animation after element is visible
+        setTimeout(() => {
+          birthdayCard.classList.add('show');
+        }, 50);
 
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
+        // Create confetti
+        createConfetti();
+      }
 
-window.addEventListener('resize', resizeCanvas);
+      // Play birthday music
+      function playBirthdayMusic() {
+        console.log('Attempting to play birthday music...');
+        
+        // Check if audio file exists and try to play
+        birthdayAudio.play().then(() => {
+          console.log('Birthday music is playing!');
+          musicButton.textContent = '🎵 Playing...';
+          
+          // Reset button text when music ends
+          birthdayAudio.addEventListener('ended', () => {
+            musicButton.textContent = '🎵 Listen to this';
+            console.log('Music ended');
+          });
+          
+        }).catch((error) => {
+          console.log('Could not play audio (this is expected if the file does not exist):', error);
+          musicButton.textContent = '🎵 Audio not available';
+          
+          // Reset button text after a delay
+          setTimeout(() => {
+            musicButton.textContent = '🎵 Listen to this';
+          }, 2000);
+        });
+      }
 
-document.getElementById('revealButton').addEventListener('click', () => {
-  // Show the birthday card
-  document.getElementById('birthdayCard').classList.remove('hidden');
+      // Event Listeners
+      mainButton.addEventListener('click', showBirthdayCard);
+      musicButton.addEventListener('click', playBirthdayMusic);
 
-  // Start confetti
-  createConfetti();
-  animateConfetti();
+      // Initialize the page
+      document.addEventListener('DOMContentLoaded', () => {
+        console.log('Birthday greeting page loaded!');
+        setRecipientName();
+      });
 
-  // Stop confetti after 5 seconds
-  setTimeout(() => {
-    stopConfetti();
-  }, 5000);
-
-  // Hide the reveal button
-  document.getElementById('revealButton').style.display = 'none';
-});
-
-// Handle the audio play button
-document.getElementById('playSongButton').addEventListener('click', () => {
-  const audio = document.getElementById('birthdayAudio');
-  audio.play();
-});
-
-confetti({
-  particleCount: 200,
-  spread: 200,
-  origin: { y: 0.6 },
-  shapes: ['circle', 'heart'],
-  colors: ['#ff7eb9', '#ff65a3', '#7afcff', '#feff9c', '#fff740']
-});
+      // Handle audio loading errors gracefully
+      birthdayAudio.addEventListener('error', (e) => {
+        console.log('Audio file not found - this is expected for demo purposes');
+      });
