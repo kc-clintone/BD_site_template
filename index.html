@@ -1,43 +1,300 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Happy Birthday [Name] !</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-</head>
-<body>
-  <canvas id="confettiCanvas"></canvas>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday Celebration</title>
+    <meta name="description" content="Beautiful Birthday Greeting Card" />
+    <meta name="author" content="Birthday Celebration App" />
 
-  <div class="container">
-    <button id="revealButton">Click Me!</button>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Pacifico&display=swap" rel="stylesheet">
 
-    <div class="card" id="birthdayCard">
-      <h1>Happy Birthday, <span class="sparkle">[Name]</span>!</h1>
+    <meta property="og:title" content="Happy Birthday Celebration" />
+    <meta property="og:description" content="Beautiful Birthday Greeting Card" />
+    <meta property="og:type" content="website" />
 
-      <p>
-        Hey you! Yes, the incredible human reading this — today is all about <em>you</em>, and I couldn't be more excited to celebrate! 🎉<br><br>
+    <style>
+      /* CSS Reset and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        From your boundless kindness to that one-of-a-kind laugh that makes everything feel lighter — you're a gem of a person, [Name] 💎<br>
-        Your energy is uplifting, your heart is gold, and your presence? Simply unforgettable. 💫<br><br>
+      body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+      }
 
-        I hope this birthday wraps you in love, fills your heart with joy, and gives you memories that make you smile for years to come. May this year be full of spontaneous adventures, inside jokes, late-night talks, and the kind of peace that comes from knowing you're surrounded by people who truly care. 💕<br><br>
+      /* Main Container */
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+        position: relative;
+        z-index: 1;
+      }
 
-        Here's to more laughter, more growth, more breakthroughs, and more snack-fueled rants about everything and nothing at all. 🧁🗯️<br><br>
+      /* Click Me Button */
+      .main-button {
+        background: linear-gradient(135deg, #ff6b6b, #feca57);
+        border: none;
+        padding: 20px 40px;
+        border-radius: 50px;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+        box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        transition: all 0.3s ease;
+        transform: scale(1);
+        position: relative;
+        overflow: hidden;
+      }
 
-        Keep shining, [Name] You make life better just by being you — and that’s a pretty amazing superpower to have. ✨<br><br>
+      .main-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+      }
 
-        <strong>Happy Birthday, my friend!</strong> 🥳<br>
-        <strong>You are celebrated, appreciated, and seriously awesome.</strong> ❤️
-      </p>
+      .main-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
+      }
 
-      <button id="playSongButton">Listen to this</button>
+      .main-button:hover::before {
+        left: 100%;
+      }
+
+      .main-button:active {
+        transform: scale(0.98);
+      }
+
+      /* Birthday Card */
+      .birthday-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        position: relative;
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+        transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 3px solid transparent;
+        background-image: linear-gradient(white, white), 
+                         linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+        background-origin: border-box;
+        background-clip: content-box, border-box;
+      }
+
+      .birthday-card.show {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      /* Card Decorations */
+      .birthday-card::before {
+        content: '🎉';
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        font-size: 2rem;
+        animation: bounce 2s infinite;
+      }
+
+      .birthday-card::after {
+        content: '🎂';
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        font-size: 2rem;
+        animation: bounce 2s infinite 0.5s;
+      }
+
+      /* Card Content */
+      .card-title {
+        font-family: 'Pacifico', cursive;
+        font-size: 2.5rem;
+        color: #ff6b6b;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-message {
+        color: #555;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 30px;
+      }
+
+      .recipient-name {
+        color: #ff6b6b;
+        font-weight: 700;
+        font-size: 1.3rem;
+      }
+
+      /* Music Button */
+      .music-button {
+        background: linear-gradient(135deg, #48dbfb, #0abde3);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        color: white;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 8px 20px rgba(72, 219, 251, 0.3);
+        transition: all 0.3s ease;
+        margin-top: 10px;
+      }
+
+      .music-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(72, 219, 251, 0.4);
+      }
+
+      .music-button:active {
+        transform: translateY(0);
+      }
+
+      /* Confetti Styles */
+      .confetti {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background: #ff6b6b;
+        pointer-events: none;
+        z-index: 1000;
+      }
+
+      .confetti:nth-child(odd) {
+        background: #feca57;
+        border-radius: 50%;
+      }
+
+      .confetti:nth-child(3n) {
+        background: #48dbfb;
+      }
+
+      .confetti:nth-child(4n) {
+        background: #ff9ff3;
+        border-radius: 50%;
+      }
+
+      .confetti:nth-child(5n) {
+        background: #54a0ff;
+      }
+
+      /* Animations */
+      @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-10px);
+        }
+        60% {
+          transform: translateY(-5px);
+        }
+      }
+
+      @keyframes confetti-fall {
+        0% {
+          transform: translateY(-100vh) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) rotate(720deg);
+          opacity: 0;
+        }
+      }
+
+      /* Hidden class */
+      .hidden {
+        display: none !important;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .main-button {
+          font-size: 1.2rem;
+          padding: 18px 35px;
+        }
+
+        .birthday-card {
+          padding: 30px 25px;
+          margin: 20px;
+        }
+
+        .card-title {
+          font-size: 2rem;
+        }
+
+        .card-message {
+          font-size: 1rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .main-button {
+          font-size: 1.1rem;
+          padding: 16px 30px;
+        }
+
+        .card-title {
+          font-size: 1.8rem;
+        }
+
+        .recipient-name {
+          font-size: 1.2rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- Main Click Me Button -->
+      <button class="main-button" id="mainButton">
+        Click Me! 🎁
+      </button>
+
+      <!-- Birthday Card (initially hidden) -->
+      <div class="birthday-card hidden" id="birthdayCard">
+        <h1 class="card-title">Happy Birthday!</h1>
+        <div class="card-message">
+          <p>🌟 Wishing you a day filled with happiness and a year filled with joy! 🌟</p>
+          <p>May all your dreams come true, <span class="recipient-name" id="recipientName">Beautiful Soul</span>!</p>
+          <p>🎈 Hope your special day brings you all the love and laughter you deserve! 🎈</p>
+        </div>
+        <button class="music-button" id="musicButton">
+          🎵 Listen to this
+        </button>
+      </div>
     </div>
-  </div>
 
-  <audio id="birthdayAudio" src="weired_birthday_song.mp3"></audio>
-  <script src="app.js"></script>
-</body>
+    <!-- Audio element for birthday song -->
+    <audio id="birthdayAudio" preload="none">
+      <source src="weired_birthday_song.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+  </body>
 </html>
-
