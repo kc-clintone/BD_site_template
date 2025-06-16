@@ -1,120 +1,250 @@
-/* Reset styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+      /* CSS Reset and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-body {
-  height: 100vh;
-  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-  font-family: 'Poppins', sans-serif;
-  overflow: hidden;
-  position: relative;
-}
+      body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+      }
 
-#confettiCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 0;
-}
+      /* Main Container */
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+        position: relative;
+        z-index: 1;
+      }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  height: 100vh;
-  z-index: 1;
-  position: relative;
-}
+      /* Click Me Button */
+      .main-button {
+        background: linear-gradient(135deg, #ff6b6b, #feca57);
+        border: none;
+        padding: 20px 40px;
+        border-radius: 50px;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+        box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        transition: all 0.3s ease;
+        transform: scale(1);
+        position: relative;
+        overflow: hidden;
+      }
 
-#revealButton {
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
-  background-color: #ff6f61;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+      .main-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+      }
 
-#revealButton:hover {
-  background-color: #e65b50;
-}
+      .main-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
+      }
 
-.card {
-  margin-top: 5rem;
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 1s forwards;
-  max-width: 1500px;
-  height: auto;
-  margin-bottom: 5rem;
-}
+      .main-button:hover::before {
+        left: 100%;
+      }
 
-.hidden {
-  display: none;
-}
+      .main-button:active {
+        transform: scale(0.98);
+      }
 
-h1 {
-  font-size: 3rem;
-  color: #ff6f61;
-  margin-bottom: 1rem;
-}
+      /* Birthday Card */
+      .birthday-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        position: relative;
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+        transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 3px solid transparent;
+        background-image: linear-gradient(white, white), 
+                         linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+        background-origin: border-box;
+        background-clip: content-box, border-box;
+      }
 
-p {
-  font-size: 1.2rem;
-  color: #555;
-  margin-bottom: 2rem;
-}
+      .birthday-card.show {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
 
-#playSongButton {
-  padding: 0.8rem 1.5rem;
-  font-size: 1rem;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+      /* Card Decorations */
+      .birthday-card::before {
+        content: '🎉';
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        font-size: 2rem;
+        animation: bounce 2s infinite;
+      }
 
-#playSongButton:hover {
-  background-color: #45a049;
-}
+      .birthday-card::after {
+        content: '🎂';
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        font-size: 2rem;
+        animation: bounce 2s infinite 0.5s;
+      }
 
-/* Fade In Animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+      /* Card Content */
+      .card-title {
+        font-family: 'Pacifico', cursive;
+        font-size: 2.5rem;
+        color: #ff6b6b;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
 
-.sparkle {
-  background: linear-gradient(90deg, #ff7eb9, #ff65a3, #7afcff, #feff9c, #fff740);
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shimmer 6s ease infinite;
-  font-weight: bold;
-}
+      .card-message {
+        color: #555;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 30px;
+      }
 
-@keyframes shimmer {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+      .recipient-name {
+        color: #ff6b6b;
+        font-weight: 700;
+        font-size: 1.3rem;
+      }
+
+      /* Music Button */
+      .music-button {
+        background: linear-gradient(135deg, #48dbfb, #0abde3);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        color: white;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 8px 20px rgba(72, 219, 251, 0.3);
+        transition: all 0.3s ease;
+        margin-top: 10px;
+      }
+
+      .music-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(72, 219, 251, 0.4);
+      }
+
+      .music-button:active {
+        transform: translateY(0);
+      }
+
+      /* Confetti Styles */
+      .confetti {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background: #ff6b6b;
+        pointer-events: none;
+        z-index: 1000;
+      }
+
+      .confetti:nth-child(odd) {
+        background: #feca57;
+        border-radius: 50%;
+      }
+
+      .confetti:nth-child(3n) {
+        background: #48dbfb;
+      }
+
+      .confetti:nth-child(4n) {
+        background: #ff9ff3;
+        border-radius: 50%;
+      }
+
+      .confetti:nth-child(5n) {
+        background: #54a0ff;
+      }
+
+      /* Animations */
+      @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-10px);
+        }
+        60% {
+          transform: translateY(-5px);
+        }
+      }
+
+      @keyframes confetti-fall {
+        0% {
+          transform: translateY(-100vh) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) rotate(720deg);
+          opacity: 0;
+        }
+      }
+
+      /* Hidden class */
+      .hidden {
+        display: none !important;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .main-button {
+          font-size: 1.2rem;
+          padding: 18px 35px;
+        }
+
+        .birthday-card {
+          padding: 30px 25px;
+          margin: 20px;
+        }
+
+        .card-title {
+          font-size: 2rem;
+        }
+
+        .card-message {
+          font-size: 1rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .main-button {
+          font-size: 1.1rem;
+          padding: 16px 30px;
+        }
+
+        .card-title {
+          font-size: 1.8rem;
+        }
+
+        .recipient-name {
+          font-size: 1.2rem;
+        }
+      }
